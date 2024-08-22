@@ -1,0 +1,48 @@
+#include <iostream>
+#include <map>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    int N;
+    cin >> N;
+    map<int, int> users;
+    for (int i = 0; i < N; i++) {
+        int userID, balance;
+        cin >> userID >> balance;
+        users[userID] = balance;
+    }
+
+    int T;
+    cin >> T;
+    for (int i = 0; i < T; i++) {
+        int from_userID, to_userID, amount;
+        cin >> from_userID >> to_userID >> amount;
+        if (users.find(from_userID) != users.end() && users.find(to_userID) != users.end()) {
+            if (users[from_userID] >= amount) {
+                users[from_userID] -= amount;
+                users[to_userID] += amount;
+                cout << "Success" << endl;
+            } else {
+                cout << "Failure" << endl;
+            }
+        } else {
+            cout << "Failure" << endl;
+        }
+    }
+
+    cout << endl; 
+
+    vector<pair<int, int>> sorted_users(users.begin(), users.end());
+    sort(sorted_users.begin(), sorted_users.end(), [](pair<int, int> a, pair<int, int> b) {
+        return a.second < b.second;
+    });
+
+    for (auto &user : sorted_users) {
+        cout << user.first << " " << user.second << endl;
+    }
+
+    return 0;
+}
